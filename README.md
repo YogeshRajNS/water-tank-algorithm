@@ -1,190 +1,291 @@
-# Water Tank Problem - Trapping Rain Water
+# 💧 Water Tank Problem - Trapping Rain Water
 
-A frontend web application that solves the classic "Trapping Rain Water" algorithm problem with interactive visualization using Vanilla JavaScript, HTML, and CSS.
+A visual web application that solves the classic "Trapping Rain Water" algorithm problem using Vanilla JavaScript, HTML, and CSS with interactive SVG visualization.
 
-## Problem Statement
+![JavaScript](https://img.shields.io/badge/javascript-ES6+-yellow.svg)
+![HTML5](https://img.shields.io/badge/html5-latest-orange.svg)
+![CSS3](https://img.shields.io/badge/css3-latest-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-Given **n** block heights (always greater than -1), compute the units of water that can be stored between the blocks. The solution provides both the calculated result and a visual representation using SVG graphics.
+## 📋 Problem Statement
 
-### Example
+Given **n** block heights (always greater than -1), compute the units of water that can be stored/trapped between the blocks. This classic algorithm problem simulates rain water collection between elevation blocks.
 
-**Input:** `[0,4,0,0,0,6,0,6,4,0]`
+**Example:**
+- **Input:** `[0,4,0,0,0,6,0,6,4,0]`
+- **Output:** `18 Units`
 
-**Output:** `18 Units`
+The water collects in valleys between taller blocks, and the amount of water at each position is determined by the minimum of the maximum heights on its left and right sides.
 
-## Features
+## 🎯 Features
 
-- **Interactive Input**: Enter custom block heights as comma-separated values
-- **Real-time Calculation**: Computes trapped water instantly using an optimized two-pointer algorithm
-- **SVG Visualization**: Dynamic visual representation showing:
-  - Block heights (yellow bars)
-  - Trapped water (translucent blue overlay)
-  - Scale and proportions
-- **Responsive Design**: Clean, modern UI with dark theme
-- **No Dependencies**: Pure Vanilla JavaScript implementation
+- **Interactive Web Interface**: Clean, modern dark-themed UI
+- **SVG Visualization**: Real-time graphical representation of blocks and water
+- **Two-Pointer Algorithm**: Efficient O(n) time complexity solution
+- **Color-Coded Display**:
+  - 🟡 Yellow: Block walls/structures
+  - 🔵 Blue: Trapped water (with transparency)
+  - ⚫ Dark background for contrast
+- **Responsive Design**: Works across different screen sizes
+- **Input Validation**: Filters invalid inputs automatically
+- **Real-Time Calculation**: Instant results as you input data
 
-## Algorithm
+## 🧮 Algorithm Explanation
 
-The solution uses the **Two-Pointer Approach** for optimal performance:
+### Two-Pointer Approach
 
-- **Time Complexity**: O(n)
-- **Space Complexity**: O(n)
+The solution uses an efficient **two-pointer technique** with O(n) time complexity and O(n) space complexity.
 
-### How It Works
+#### How It Works:
 
-1. Initialize two pointers at the start (`left`) and end (`right`) of the array
-2. Track the maximum heights seen from both sides (`leftMax`, `rightMax`)
-3. Move pointers inward, always processing the side with the smaller height
-4. Calculate water trapped at each position: `max(0, maxHeight - currentHeight)`
-5. Continue until pointers meet
+1. **Initialize Pointers**: Start with `left` at the beginning and `right` at the end
+2. **Track Maximum Heights**: Maintain `leftMax` and `rightMax` for heights seen so far
+3. **Move Pointers Inward**: 
+   - If `height[left] < height[right]`: Process left side
+     - Update `leftMax`
+     - Calculate water: `waterAt[left] = max(0, leftMax - height[left])`
+     - Move `left++`
+   - Else: Process right side
+     - Update `rightMax`
+     - Calculate water: `waterAt[right] = max(0, rightMax - height[right])`
+     - Move `right--`
+4. **Continue**: Repeat until pointers meet
 
-This approach ensures each element is processed exactly once, achieving linear time complexity.
+#### Why It Works:
 
-## Installation & Usage
+The key insight is that the water level at any position is determined by the minimum of the maximum heights on both sides. By processing from both ends, we can efficiently determine this without scanning the entire array multiple times.
 
-### Prerequisites
+#### Complexity Analysis:
+- **Time Complexity**: O(n) - Single pass through the array
+- **Space Complexity**: O(n) - Array to store water at each position
+- **Optimality**: This is the optimal solution for this problem
 
-- Any modern web browser (Chrome, Firefox, Safari, Edge)
-- No server or build tools required
+### Example Walkthrough
 
-### Running the Application
-
-1. **Clone the repository:**
-   ```bash
-   git clone <repository-url>
-   cd water-tank-problem
-   ```
-
-2. **Open the HTML file:**
-   - Simply open `water_tank_algorithm.html` in your web browser
-   - Or use a local server (optional):
-     ```bash
-     # Using Python 3
-     python -m http.server 8000
-     
-     # Using Node.js
-     npx serve
-     ```
-
-3. **Use the application:**
-   - Enter block heights as comma-separated numbers (e.g., `0,4,0,0,0,6,0,6,4,0`)
-   - Click "Compute Water" button
-   - View the result and visual representation
-
-## Code Structure
+For input `[0,4,0,0,0,6,0,6,4,0]`:
 
 ```
-water-tank-problem/
-│
-├── water_tank_algorithm.html    # Main application file
-│   ├── HTML Structure           # Input form and SVG container
-│   ├── CSS Styles              # Dark theme styling
-│   └── JavaScript Logic        # Algorithm and visualization
-│
-└── README.md                    # This file
+Position:  0  1  2  3  4  5  6  7  8  9
+Height:    0  4  0  0  0  6  0  6  4  0
+Water:     0  0  4  4  4  0  2  0  0  0
+Total: 0+0+4+4+4+0+2+0+0+0 = 18 units
 ```
 
-## Key Functions
+Visual representation:
+```
+6 |       █     █
+5 |       █     █
+4 |   █   █     █   █
+3 |   █ W █ W   █   █
+2 |   █ W █ W   █ W █
+1 |   █ W █ W   █ W █
+0 | _ █ W █ W █ █ W █ _ 
+    0 1 2 3 4 5 6 7 8 9
 
-### `trapRainWater(height)`
-Core algorithm that calculates total water trapped and water at each position.
+█ = Block (Yellow)
+W = Water (Blue)
+```
 
-**Parameters:**
-- `height` (Array): Array of block heights
+## 🚀 Installation & Usage
 
-**Returns:**
-- Object containing:
-  - `water` (Number): Total units of water trapped
-  - `waterAt` (Array): Water trapped at each position
+### Option 1: Direct Usage (Recommended)
 
-### `solve()`
-Processes user input, validates data, and triggers calculation and visualization.
+1. **Clone the repository**
+```bash
+git clone https://github.com/YogeshRajNS/Water_Tank_Algorithm.git
+cd Water_Tank_Algorithm
+```
 
-### `drawChart(blocks, waterAt)`
-Generates SVG visualization showing blocks and trapped water.
+2. **Open in Browser**
+```bash
+# Simply open the HTML file in your browser
+open water_tank_algorithm.html
+# Or on Windows
+start water_tank_algorithm.html
+# Or on Linux
+xdg-open water_tank_algorithm.html
+```
 
-**Parameters:**
-- `blocks` (Array): Block heights
-- `waterAt` (Array): Water trapped at each position
+That's it! No installation or dependencies required.
 
-## Technical Details
+### Option 2: Using Live Server (Development)
+
+1. **Install Live Server** (if using VS Code)
+   - Install the "Live Server" extension
+   - Right-click on `water_tank_algorithm.html`
+   - Select "Open with Live Server"
+
+2. **Or use Python's HTTP server**
+```bash
+python -m http.server 8000
+# Then open http://localhost:8000/water_tank_algorithm.html
+```
+
+## 💻 How to Use
+
+1. **Enter Block Heights**: Input comma-separated numbers in the text field
+   - Example: `0,4,0,0,0,6,0,6,4,0`
+   - Example: `3,0,2,0,4`
+   - Example: `0,1,0,2,1,0,1,3,2,1,2,1`
+
+2. **Click "Compute Water"**: The application will:
+   - Calculate total water trapped
+   - Display the result
+   - Generate an interactive SVG visualization
+
+3. **View Results**:
+   - Total water units displayed above the chart
+   - SVG chart shows blocks (yellow) and water (blue)
+   - Visual representation makes it easy to verify the solution
+
+## 🎨 Visualization Details
+
+### Color Scheme
+- **Background**: Dark navy (`#0f172a`)
+- **Blocks/Walls**: Yellow (`#facc15`)
+- **Water**: Light blue (`#38BDF8`) with 80% opacity
+- **Axis**: Gray (`#475569`)
+
+### SVG Components
+- **Chart Area**: 800x300 pixels (responsive)
+- **Block Width**: Dynamically calculated based on input length
+- **Height Scaling**: Proportional to maximum block height
+- **Water Overlay**: Rendered above blocks with transparency
+
+## 📁 Project Structure
+
+```
+Water_Tank_Algorithm/
+│
+├── water_tank_algorithm.html    # Complete web application (HTML/CSS/JS)
+├── README.md                     # This documentation
+```
+
+## 🛠️ Technologies Used
+
+- **HTML5**: Structure and layout
+- **CSS3**: Styling and visual design
+- **Vanilla JavaScript**: Logic and interactivity
+- **SVG (Scalable Vector Graphics)**: Data visualization
+
+### Why Vanilla JavaScript?
+
+This project uses pure JavaScript without any frameworks or libraries to:
+- ✅ Demonstrate core JavaScript skills
+- ✅ Keep the solution lightweight and fast
+- ✅ Ensure no external dependencies
+- ✅ Make it easy to understand and modify
+
+## 🧪 Test Cases
+
+### Test Case 1
+**Input:** `[0,4,0,0,0,6,0,6,4,0]`  
+**Expected Output:** `18 Units`  
+**Explanation:** Water fills valleys between heights 4, 6, and 6
+
+### Test Case 2
+**Input:** `[3,0,2,0,4]`  
+**Expected Output:** `7 Units`  
+**Explanation:** Water trapped: 0+3+1+3+0 = 7
+
+### Test Case 3
+**Input:** `[0,1,0,2,1,0,1,3,2,1,2,1]`  
+**Expected Output:** `6 Units`  
+**Explanation:** Multiple small valleys trap water
+
+### Test Case 4
+**Input:** `[4,2,0,3,2,5]`  
+**Expected Output:** `9 Units`  
+**Explanation:** Large valley between heights 4 and 5
+
+### Edge Cases
+**Input:** `[5,5,5,5]` → **Output:** `0 Units` (flat surface, no valleys)  
+**Input:** `[1,2,3,4,5]` → **Output:** `0 Units` (ascending, no trapping)  
+**Input:** `[5,4,3,2,1]` → **Output:** `0 Units` (descending, no trapping)
+
+## 🎯 Code Highlights
+
+### Core Algorithm Function
+```javascript
+function trapRainWater(height) {
+    let left = 0, right = height.length - 1;
+    let leftMax = 0, rightMax = 0;
+    let water = 0;
+    let waterAt = new Array(height.length).fill(0);
+
+    while (left < right) {
+        if (height[left] < height[right]) {
+            leftMax = Math.max(leftMax, height[left]);
+            waterAt[left] = Math.max(0, leftMax - height[left]);
+            water += waterAt[left];
+            left++;
+        } else {
+            rightMax = Math.max(rightMax, height[right]);
+            waterAt[right] = Math.max(0, rightMax - height[right]);
+            water += waterAt[right];
+            right--;
+        }
+    }
+    return { water, waterAt };
+}
+```
 
 ### Input Validation
-- Splits input by commas
-- Parses integers
-- Filters out invalid values (NaN, negative numbers)
-- Handles empty or malformed input gracefully
-
-### Visualization
-- SVG-based rendering for crisp, scalable graphics
-- Color coding:
-  - **Yellow (#facc15)**: Block walls
-  - **Blue (#38BDF8)**: Trapped water (with 80% opacity)
-  - **Gray (#64748b)**: Base blocks
-- Automatic scaling based on maximum height
-- Responsive bar width based on number of blocks
-
-## Browser Compatibility
-
-- ✅ Chrome 90+
-- ✅ Firefox 88+
-- ✅ Safari 14+
-- ✅ Edge 90+
-
-## Example Test Cases
-
 ```javascript
-// Test Case 1: Original example
-Input: [0,4,0,0,0,6,0,6,4,0]
-Output: 18 Units
-
-// Test Case 2: Simple valley
-Input: [3,0,2,0,4]
-Output: 7 Units
-
-// Test Case 3: Ascending stairs
-Input: [1,2,3,4,5]
-Output: 0 Units
-
-// Test Case 4: Descending stairs
-Input: [5,4,3,2,1]
-Output: 0 Units
-
-// Test Case 5: Multiple valleys
-Input: [4,2,0,3,2,5]
-Output: 9 Units
+const values = document.getElementById("input").value
+    .split(',')
+    .map(v => parseInt(v.trim()))
+    .filter(v => !isNaN(v) && v >= 0);
 ```
 
-## Assignment Requirements
+## 🌐 Browser Compatibility
 
-✅ **Requirement Met**: Compute water units stored between blocks
+- ✅ Chrome (recommended)
+- ✅ Firefox
+- ✅ Safari
+- ✅ Edge
+- ✅ Opera
 
-✅ **Requirement Met**: Web application using Vanilla JavaScript
+**Requirements**: Modern browser with SVG support (all major browsers since 2015+)
 
-✅ **Requirement Met**: HTML/CSS frontend solution
+## 🤝 Contributing
 
-✅ **Requirement Met**: SVG shape representation (preferred method)
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-✅ **Requirement Met**: Handle input where n > -1
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## Future Enhancements
+## 📝 License
+
+This project is licensed under the MIT License.
+
+## 👤 Author
+
+**Yogesh Raj NS** - [@YogeshRajNS](https://github.com/YogeshRajNS)
+
+Project Link: [https://github.com/YogeshRajNS/Water_Tank_Algorithm](https://github.com/YogeshRajNS/Water_Tank_Algorithm)
+
+## 🙏 Acknowledgments
+
+- Problem based on **"Water Tank Problem"** interview assignment
+- Classic **"Trapping Rain Water"** algorithm from LeetCode
+- Inspired by data structure and algorithm challenges
+- SVG visualization technique for algorithm understanding
+
+## 🔮 Future Enhancements
 
 -  Add animation showing water filling process
--  Export visualization as PNG/SVG
--  Multiple color themes
--  Display water at each position in a table view
--  Step-by-step algorithm visualization
--  Pre-loaded example datasets
--  Mobile-responsive controls
-
-## License
-
-This project is created as an interview assignment solution.
-
-## Author
-
-Created as a solution to the Water Tank Problem coding challenge.
+-  Display step-by-step algorithm execution
+-  Add different visualization styles (3D, isometric)
+-  Export results as image/PDF
+-  Compare different algorithm approaches (brute force vs two-pointer)
+-  Add preset examples dropdown
+-  Mobile-responsive touch interactions
+-  Show time complexity visualization
 
 ---
 
-**Note**: This is a pure frontend solution with no backend dependencies. All calculations and rendering happen in the browser using Vanilla JavaScript.
+⭐ If you found this project helpful, please consider giving it a star!
