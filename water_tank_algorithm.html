@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Tank Problem - Trapping Rain Water</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color:#e5e7eb;
+            padding: 20px;
+        }
+        h1{
+            margin-bottom: 10px;
+        }
+        .container{
+            max-width: 900px;
+            margin:auto;
+        }
+        input{
+            width:100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border: none;
+            outline:none;
+            font-size: 14px;
+        }
+        button{
+            padding: 10px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            background: #22c55e;
+            color: #022c22;
+            font-weight: bold;
+        }
+        .result{
+            margin-top: 15px;
+            font-size: 16px;
+        }
+
+        svg{
+            margin-top: 25px;
+            background: #020617;
+            border-radius: 8px;
+        }
+        .wall {
+            fill: #facc15; /* yellow */
+        }
+
+        .block{
+            fill: #64748b;
+        }
+
+        .water{
+            fill: #38BDF8;
+            opacity: 0.8;
+        }
+        .axis{
+            stroke: #475569;
+            stroke-width: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Water Tank Problem (Trapping Rain Water)</h1>
+        <p>Enter block heights(comma separated)</p>
+
+        <input id="input" placeholder="Example: 0,4,0,0,0,6,0,6,4,0"/>
+        <button onclick="solve()">Compute Water</button>
+
+        <div class="result" id="result"></div>
+
+        <svg id="chart" width="800" height="300"></svg>
+    </div>
+    <script>
+        function trapRainWater(height){
+            let left = 0, right =height.length - 1;
+            let leftMax = 0, rightMax = 0;
+            let water = 0;
+            let waterAt = new Array(height.length).fill(0);
+
+            while (left<right){
+                if (height[left] < height[right]){
+                    leftMax=Math.max(leftMax, height[left]);
+                    waterAt[left] = Math.max(0, leftMax - height[left]);
+                    water += waterAt[left];
+                    left++;
+                }else{
+                    rightMax = Math.max(rightMax, height[right]);
+                    waterAt[right] = Math.max(0,rightMax - height[right]);
+                    water +=waterAt[right];
+                    right--;
+                }
+            }
+            return {water, waterAt};
+        }
+
+        function solve(){
+            const values = document.getElementById("input").value
+            .split(',')
+            .map(v=> parseInt(v.trim()))
+            .filter(v=> !isNaN(v) && v>=0);
+            
+            const {water,waterAt} = trapRainWater(values);
+            document.getElementById("result").innerText = 
+            `Total Water STored: ${water} Units`;
+            drawChart(values, waterAt);
+        }
+
+        function drawChart(blocks, waterAt){
+            const svg = document.getElementById("chart");
+            svg.innerHTML ="";
+
+            const width = svg.clientWidth;
+            const height = svg.clientHeight;
+            const barWidth =width/ blocks.length;
+            const maxHeight = Math.max(...blocks.map((b, i)=> b + waterAt[i]))
+
+            const axis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            axis.setAttribute("x1",0);
+            axis.setAttribute("y1", height - 20);
+            axis.setAttribute("x2", width);
+            axis.setAttribute("y2", height - 20);
+            axis.setAttribute("class","axis");
+            svg.appendChild(axis);
+
+            blocks.forEach((b, i)=>{
+                const blockHeight = (b / maxHeight)*(height - 40);
+                const waterHeight = (waterAt[i] / maxHeight) * (height - 40);
+
+                const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                rect.setAttribute("x", i * barWidth + 5);
+                rect.setAttribute("y", height - 20 - blockHeight);
+                rect.setAttribute("width", barWidth - 10);
+                rect.setAttribute("height", blockHeight);
+                if (waterAt[i] > 0) {
+                    rect.setAttribute("class", "wall"); // side wall
+                } else {
+                    rect.setAttribute("class", "wall"); // normal block
+                }
+                svg.appendChild(rect);
+
+                if (waterHeight> 0){
+                    const waterRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                    waterRect.setAttribute("x", i * barWidth + 5);
+                    waterRect.setAttribute("y", height - 20 - blockHeight - waterHeight);
+                    waterRect.setAttribute("width" , barWidth - 10);
+                    waterRect.setAttribute("height", waterHeight);
+                    waterRect.setAttribute("class", "water");
+                    svg.appendChild(waterRect)
+                }
+            });
+        }
+    </script>
+    
+</body>
+</html>
