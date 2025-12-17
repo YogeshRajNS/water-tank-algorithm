@@ -155,7 +155,7 @@ python -m http.server 8000
 ## 📁 Project Structure
 
 ```
-Water_Tank_Algorithm/
+water-tank-algorithm/
 │
 ├── water_tank_algorithm.html    # Complete web application (HTML/CSS/JS)
 ├── README.md                     # This documentation
@@ -266,7 +266,7 @@ This project is licensed under the MIT License.
 
 **Yogesh Raj NS** - [@YogeshRajNS](https://github.com/YogeshRajNS)
 
-Project Link: [https://github.com/YogeshRajNS/Water_Tank_Algorithm](https://github.com/YogeshRajNS/Water_Tank_Algorithm)
+Project Link: [https://github.com/YogeshRajNS/Water_Tank_Algorithm](https://github.com/YogeshRajNS/water-tank-algorithm.git)
 
 ## 🙏 Acknowledgments
 
@@ -288,4 +288,3 @@ Project Link: [https://github.com/YogeshRajNS/Water_Tank_Algorithm](https://gith
 
 ---
 
-⭐ If you found this project helpful, please consider giving it a star!
